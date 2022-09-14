@@ -1,13 +1,26 @@
-import React, { useState } from 'react';
-import { SafeAreaView, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, SafeAreaView } from 'react-native';
 
 import { ALL_RPG_URL, AllRpgTag } from './constants';
 import { UIButton } from './UI/Buttons/UIButton';
 import { Flex } from './UI/Flex/Flex';
 import { AppWebView } from './WebView/WebView';
 
+const checkIsPortrait = (): boolean => {
+  const dim = Dimensions.get('screen');
+
+  return dim.height >= dim.width;
+};
+
 export const App = (): JSX.Element => {
-  const [currentTab, setCurrentTab] = useState<string>('');
+  const [currentTab, setCurrentTab] = useState('');
+  const [isPortrait, setIsPortrait] = useState(checkIsPortrait());
+
+  useEffect(() => {
+    Dimensions.addEventListener('change', () => {
+      setIsPortrait(checkIsPortrait());
+    });
+  }, []);
 
   function navigateTo(pageHash: AllRpgTag): void {
     setCurrentTab(pageHash.replace('#', ''));
@@ -41,31 +54,23 @@ export const App = (): JSX.Element => {
 
   return (
     <SafeAreaView>
-      <Flex align="flex-start" fullHeight>
+      <Flex align="flex-start" fullHeight direction={!isPortrait ? undefined : 'column'}>
         <Flex flex={4} shadowType="l1">
           <AppWebView baseUrl={`${ALL_RPG_URL}/start`} id={currentTab} />
         </Flex>
 
-        <Flex direction="column" flex={1}>
-          <Text
-            style={{
-              fontSize: 10,
-            }}
-          >
-            SHADOWRUN ALPHA
-          </Text>
+        <Flex direction={isPortrait ? undefined : 'column'} shrink={2} gap={8} justify="space-between" fullWidth={isPortrait}>
+          <UIButton iconType="qr" onPress={onShowQrCodeHandler} fullWidth isSelected={page === AllRpgTag.QR} />
 
-          <UIButton title="QR-Code" onPress={onShowQrCodeHandler} fullWidth isSelected={page === AllRpgTag.QR} />
+          <UIButton iconType="inventory" onPress={onShowKeysHandler} fullWidth isSelected={page === AllRpgTag.Keys} />
 
-          <UIButton title="Inventory" onPress={onShowKeysHandler} fullWidth isSelected={page === AllRpgTag.Keys} />
+          <UIButton iconType="passport" onPress={onShowGamePassportHandler} fullWidth isSelected={page === AllRpgTag.GamePassport} />
 
-          <UIButton title="Character Passport" onPress={onShowGamePassportHandler} fullWidth isSelected={page === AllRpgTag.GamePassport} />
+          <UIButton iconType="story" onPress={onShowStoryHandler} fullWidth isSelected={page === AllRpgTag.Info} />
 
-          <UIButton title="Character Story" onPress={onShowStoryHandler} fullWidth isSelected={page === AllRpgTag.Info} />
+          <UIButton iconType="agenda" onPress={onShowLegendHandler} fullWidth isSelected={page === AllRpgTag.Agenda} />
 
-          <UIButton title="Character legend" onPress={onShowLegendHandler} fullWidth isSelected={page === AllRpgTag.Agenda} />
-
-          <UIButton title="Bank" onPress={onShowBankHandler} fullWidth isSelected={page === AllRpgTag.Bank} />
+          <UIButton iconType="bank" onPress={onShowBankHandler} fullWidth isSelected={page === AllRpgTag.Bank} />
         </Flex>
       </Flex>
     </SafeAreaView>

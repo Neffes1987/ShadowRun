@@ -27,7 +27,16 @@ export interface FlexProps {
 export type UIButtonPropsType = 'primary' | 'secondary' | 'round';
 export interface UIButtonProps extends TouchableOpacityProps {
   type?: 'primary' | 'secondary';
-  title: string;
+  iconType?: IconType;
+  title?: string;
   fullWidth?: boolean;
   isSelected?: boolean;
+}
+
+type IconType = 'qr' | 'bank' | 'inventory' | 'agenda' | 'passport' | 'story';
+export interface IconProps {
+  type: IconType;
+  color?: string;
+  rotate?: number;
+  size?: number;
 }

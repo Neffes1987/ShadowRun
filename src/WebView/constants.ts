@@ -8,7 +8,7 @@ export const hideBlocks = [
 ];
 
 export const DISABLED_STYLES = `${hideBlocks.toString()} {display: none !important;}`;
-export const MAIN_CONTENT_STYLES = '.fullpage_wrapper .content {padding: 20px 0}';
+export const MAIN_CONTENT_STYLES = '.fullpage_wrapper .content {padding: 0; padding-bottom: 60px}';
 export const FULLPAGE_WRAPPER_STYLES = '.fullpage_wrapper { width: 100%!important; margin-left: 0!important;}';
 
 export const STYLES = `'${DISABLED_STYLES} ${MAIN_CONTENT_STYLES} ${FULLPAGE_WRAPPER_STYLES}'`;
